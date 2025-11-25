@@ -16,3 +16,10 @@ export default defineConfig(({ mode }) => ({
     },
   },
 }));
+export default {
+  server: {
+    allowedHosts: [
+      'guidaroo-lv.onrender.com'
+    ]
+  }
+}
