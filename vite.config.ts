@@ -15,11 +15,9 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-}));
-export default {
   server: {
     allowedHosts: [
       'guidaroo-lv.onrender.com'
     ]
   }
-}
+}));
