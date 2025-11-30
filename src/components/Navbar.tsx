@@ -3,9 +3,29 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import logo from "@/assets/logo.png";
 import { MapPin, MessageCircle, User, LogOut, Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 const Navbar = () => {
   const { user, signOut } = useAuth();
+  const [role, setRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    const load = async () => {
+      if (!user) return setRole(null);
+      const { data } = await fetchProfile();
+      if (!mounted) return;
+      setRole(data?.role ?? null);
+    };
+    load();
+    return () => { mounted = false; };
+  }, [user]);
+
+  const fetchProfile = async () => {
+    if (!user) return { data: null };
+    return await supabase.from('profiles').select('role').eq('id', user.id).single();
+  };
 
   return (
     <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
@@ -31,6 +51,16 @@ const Navbar = () => {
                     Find Guides
                   </Link>
                 </Button>
+                {role === 'guide' && (
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to="/dashboard/guide">Dashboard</Link>
+                  </Button>
+                )}
+                {role === 'tourist' && (
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to="/dashboard/tourist">Dashboard</Link>
+                  </Button>
+                )}
                 <Button variant="ghost" size="sm" asChild>
                   <Link to="/bookings">
                     <MapPin className="h-4 w-4 mr-2" />

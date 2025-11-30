@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MapPin, Calendar, Clock, DollarSign, MessageCircle } from "lucide-react";
+import { MapPin, Calendar, Clock, MessageCircle } from "lucide-react";
+import { formatCurrency } from "@/lib/utils";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -143,10 +144,10 @@ const BookingsPage = () => {
                           </CardHeader>
                           <CardContent>
                             <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-1 text-primary font-semibold">
-                                <DollarSign className="h-4 w-4" />
-                                {booking.total_amount}
-                              </div>
+                                <div className="flex items-center gap-1 text-primary font-semibold">
+                                  <span className="h-4 w-4 flex items-center justify-center">₹</span>
+                                  {formatCurrency(booking.total_amount)}
+                                </div>
                               <div className="flex gap-2">
                                 {booking.status === 'pending' && isGuide && (
                                   <>

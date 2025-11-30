@@ -1,5 +1,9 @@
-/* Tailwind directives removed for environments that don't process PostCSS/Tailwind;
-   enable Tailwind in your build pipeline if you want to keep using @tailwind / @apply. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tailwind directives enabled so Tailwind utilities are produced during the
+  PostCSS/Tailwind build. Keep these if you want Tailwind classes to work. */
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.

@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { MapPin, Star, Languages, DollarSign, Shield, Search as SearchIcon } from "lucide-react";
+import { MapPin, Star, Languages, Shield, Search as SearchIcon } from "lucide-react";
+import { formatCurrency } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -131,7 +132,7 @@ const SearchPage = () => {
                 </Select>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Max Price: ${maxPrice[0]}/hr</label>
+                <label className="text-sm font-medium">Max Price: {formatCurrency(maxPrice[0])}/hr</label>
                 <Slider
                   value={maxPrice}
                   onValueChange={setMaxPrice}
@@ -220,8 +221,8 @@ const SearchPage = () => {
                       </span>
                     </div>
                     <div className="flex items-center gap-1 font-semibold text-primary">
-                      <DollarSign className="h-4 w-4" />
-                      {guide.hourly_rate}/hr
+                      <span className="h-4 w-4 flex items-center justify-center">₹</span>
+                      {formatCurrency(guide.hourly_rate)}/hr
                     </div>
                   </div>
                 </CardContent>

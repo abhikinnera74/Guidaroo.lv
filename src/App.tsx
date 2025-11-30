@@ -12,6 +12,8 @@ import GuideProfilePage from "./pages/GuideProfilePage";
 import BookingsPage from "./pages/BookingsPage";
 import ChatPage from "./pages/ChatPage";
 import ReviewPage from "./pages/ReviewPage";
+import GuideDashboard from "./pages/GuideDashboard";
+import TouristDashboard from "./pages/TouristDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +31,8 @@ const App = () => (
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/guide/:guideId" element={<GuideProfilePage />} />
+            <Route path="/dashboard/guide" element={<GuideDashboard />} />
+            <Route path="/dashboard/tourist" element={<TouristDashboard />} />
             <Route path="/bookings" element={<BookingsPage />} />
             <Route path="/messages/:bookingId" element={<ChatPage />} />
             <Route path="/review/:bookingId" element={<ReviewPage />} />

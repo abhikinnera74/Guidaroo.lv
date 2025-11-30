@@ -10,7 +10,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { MapPin, Star, Languages, DollarSign, Shield, Calendar, Clock } from "lucide-react";
+import { MapPin, Star, Languages, Shield, Calendar, Clock } from "lucide-react";
+import { formatCurrency } from "@/lib/utils";
 import { toast } from "sonner";
 
 const GuideProfilePage = () => {
@@ -27,6 +28,16 @@ const GuideProfilePage = () => {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [notes, setNotes] = useState("");
+
+  const bookingHours = (() => {
+    if (!bookingDate || !startTime || !endTime) return 0;
+    const start = new Date(`${bookingDate}T${startTime}`);
+    const end = new Date(`${bookingDate}T${endTime}`);
+    const hours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+    return hours > 0 ? hours : 0;
+  })();
+
+  const bookingTotalPreview = guide?.hourly_rate ? bookingHours * guide.hourly_rate : 0;
 
   useEffect(() => {
     if (guideId) {
@@ -96,6 +107,10 @@ const GuideProfilePage = () => {
       const start = new Date(`${bookingDate}T${startTime}`);
       const end = new Date(`${bookingDate}T${endTime}`);
       const hours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+      if (hours <= 0) {
+        toast.error("End time must be after start time");
+        return;
+      }
       const totalAmount = hours * guide.hourly_rate;
 
       const { error } = await supabase
@@ -173,8 +188,8 @@ const GuideProfilePage = () => {
                     </span>
                   </div>
                   <div className="flex items-center gap-1 text-primary font-bold text-xl">
-                    <DollarSign className="h-5 w-5" />
-                    {guide.hourly_rate}/hour
+                    <span className="h-5 w-5 flex items-center justify-center">₹</span>
+                    {formatCurrency(guide.hourly_rate)}/hour
                   </div>
                 </div>
               </div>
@@ -301,6 +316,12 @@ const GuideProfilePage = () => {
                     onChange={(e) => setNotes(e.target.value)}
                   />
                 </div>
+                {bookingHours > 0 && (
+                  <div className="p-4 rounded-md bg-muted/30">
+                    <p className="text-sm">Estimated duration: <strong>{bookingHours.toFixed(2)} hrs</strong></p>
+                    <p className="text-sm">Estimated total: <strong className="text-primary">{formatCurrency(bookingTotalPreview)}</strong></p>
+                  </div>
+                )}
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setBookingOpen(false)}>
